@@ -23,7 +23,6 @@
             position: relative;
         }
 
-        /* Канвас для частиц */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -33,7 +32,6 @@
             z-index: 0;
         }
 
-        /* Свечение на фоне */
         .glow-bg {
             position: fixed;
             width: 600px;
@@ -88,7 +86,6 @@
             background-clip: text;
             animation: gradient 5s ease infinite;
             line-height: 1.3;
-            text-shadow: 0 0 40px rgba(100, 150, 255, 0.5);
         }
 
         @keyframes gradient {
@@ -120,9 +117,40 @@
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        /* Счётчик с барабанной анимацией */
+        /* LIVE индикатор */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 50, 50, 0.2);
+            border: 1px solid rgba(255, 50, 50, 0.5);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ff4444;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.8); }
+        }
+
         .counter {
             font-size: 4.5em;
             font-weight: bold;
@@ -133,12 +161,10 @@
             position: relative;
             display: inline-block;
             overflow: hidden;
-            text-shadow: 0 0 30px rgba(100, 150, 255, 0.8);
         }
 
         .counter-digit {
             display: inline-block;
-            position: relative;
             animation: digitSlide 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
@@ -227,27 +253,72 @@
             font-style: italic;
         }
 
-        .status-indicator {
+        /* Уведомление о новой подписи */
+        .notification {
             position: fixed;
             top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background: rgba(100, 150, 255, 0.2);
-            border: 1px solid rgba(100, 150, 255, 0.5);
-            border-radius: 20px;
-            font-size: 0.85em;
-            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(76, 175, 80, 0.9);
             backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            box-shadow: 0 10px 40px rgba(76, 175, 80, 0.3);
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .status-indicator.online {
-            background: rgba(76, 175, 80, 0.2);
-            border-color: rgba(76, 175, 80, 0.5);
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
         }
 
-        .status-indicator.offline {
-            background: rgba(255, 100, 100, 0.2);
-            border-color: rgba(255, 100, 100, 0.5);
+        .notification-icon {
+            font-size: 1.5em;
+            animation: notificationBounce 0.6s ease;
+        }
+
+        @keyframes notificationBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Статус подключения */
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(20, 20, 60, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.8em;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        .status-dot.error {
+            background: #ff4444;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         @media (max-width: 768px) {
@@ -269,7 +340,15 @@
     <div class="glow-bg"></div>
     <div class="glow-bg"></div>
     
-    <div class="status-indicator" id="statusIndicator">
+    <!-- Уведомление -->
+    <div class="notification" id="notification">
+        <span class="notification-icon">✍️</span>
+        <span id="notificationText">Кто-то только что подписал!</span>
+    </div>
+
+    <!-- Статус -->
+    <div class="status-bar">
+        <div class="status-dot" id="statusDot"></div>
         <span id="statusText">Подключение...</span>
     </div>
 
@@ -293,7 +372,13 @@
         </div>
 
         <div class="counter-wrapper">
-            <div class="counter-label">Нас уже:</div>
+            <div class="counter-label">
+                <span class="live-badge">
+                    <span class="live-dot"></span>
+                    LIVE
+                </span>
+                Нас уже:
+            </div>
             <div class="counter" id="counter">0</div>
         </div>
 
@@ -305,7 +390,7 @@
     </div>
 
     <script>
-        // ===== ЧАСТИЦЫ НА ФОНЕ =====
+        // ===== ЧАСТИЦЫ =====
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -328,7 +413,6 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
@@ -355,7 +439,6 @@
                 particle.draw();
             });
 
-            // Соединяем частицы линиями
             particles.forEach((p1, i) => {
                 particles.slice(i + 1).forEach(p2 => {
                     const dx = p1.x - p2.x;
@@ -384,19 +467,21 @@
             canvas.height = window.innerHeight;
         });
 
-        // ===== СЧЁТЧИК =====
+        // ===== СЧЁТЧИК С REAL-TIME =====
         const WORKER_URL = 'https://calm-dream-11e5petition-counter.tvorcheskiparen.workers.dev';
         
         const counterElement = document.getElementById('counter');
         const signButton = document.getElementById('signButton');
-        const statusIndicator = document.getElementById('statusIndicator');
+        const notification = document.getElementById('notification');
+        const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         
         let currentCount = 0;
         let hasSigned = localStorage.getItem('hasSigned') === 'true';
+        let pollInterval;
 
-        // Анимация чисел с эффектом барабана
-        function animateCounterWithEffect(target) {
+        // Анимация чисел
+        function animateCounterWithEffect(target, isExternal = false) {
             const currentStr = currentCount.toString();
             const targetStr = target.toString();
             const maxLen = Math.max(currentStr.length, targetStr.length);
@@ -416,25 +501,48 @@
             
             counterElement.innerHTML = html;
             counterElement.classList.remove('glow');
-            void counterElement.offsetWidth; // Trigger reflow
+            void counterElement.offsetWidth;
             counterElement.classList.add('glow');
             
             currentCount = target;
         }
 
-        async function getCounter() {
+        async function fetchCounter() {
             try {
                 const response = await fetch(WORKER_URL + '?t=' + Date.now(), {
                     cache: 'no-cache'
                 });
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 const count = await response.text();
+                statusDot.classList.remove('error');
+                statusText.textContent = 'Онлайн';
                 return parseInt(count) || 0;
             } catch (error) {
-                console.error('Ошибка получения счётчика:', error);
-                statusIndicator.className = 'status-indicator offline';
-                statusText.textContent = 'Ошибка соединения';
-                return 0;
+                console.error('Ошибка:', error);
+                statusDot.classList.add('error');
+                statusText.textContent = 'Ошибка';
+                return null;
+            }
+        }
+
+        // Показать уведомление
+        function showNotification() {
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Опрос сервера каждые 2 секунды
+        async function pollCounter() {
+            const newCount = await fetchCounter();
+            if (newCount !== null && newCount > currentCount) {
+                const diff = newCount - currentCount;
+                animateCounterWithEffect(newCount, true);
+                
+                if (diff > 0) {
+                    showNotification();
+                }
             }
         }
 
@@ -449,24 +557,25 @@
                 const count = await response.text();
                 return parseInt(count) || 0;
             } catch (error) {
-                console.error('Ошибка увеличения счётчика:', error);
-                statusIndicator.className = 'status-indicator offline';
-                statusText.textContent = 'Ошибка соединения';
+                console.error('Ошибка:', error);
                 return currentCount;
             }
         }
 
         async function init() {
-            const count = await getCounter();
-            statusIndicator.className = 'status-indicator online';
-            statusText.textContent = 'Онлайн';
-            animateCounterWithEffect(count);
+            const count = await fetchCounter();
+            if (count !== null) {
+                animateCounterWithEffect(count);
+            }
 
             if (hasSigned) {
                 signButton.textContent = '✓ Вы уже подписали';
                 signButton.classList.add('signed');
                 signButton.disabled = true;
             }
+
+            // Запускаем polling каждые 2 секунды
+            pollInterval = setInterval(pollCounter, 2000);
         }
 
         signButton.addEventListener('click', async () => {
@@ -475,7 +584,6 @@
             signButton.disabled = true;
             signButton.textContent = 'Подписываю...';
 
-            // СРАЗУ увеличиваем визуально для мгновенной реакции
             const optimisticCount = currentCount + 1;
             animateCounterWithEffect(optimisticCount);
 
@@ -486,14 +594,7 @@
                 localStorage.setItem('hasSigned', 'true');
                 signButton.textContent = '✓ Спасибо за подпись!';
                 signButton.classList.add('signed');
-                statusIndicator.className = 'status-indicator online';
-                statusText.textContent = 'Подпись засчитана!';
-                
-                setTimeout(() => {
-                    statusText.textContent = 'Онлайн';
-                }, 2000);
             } else {
-                // Если не сработало, откатываем
                 animateCounterWithEffect(currentCount);
                 signButton.disabled = false;
                 signButton.textContent = 'Подписать петицию';
