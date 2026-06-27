@@ -196,10 +196,10 @@
         }
         .notification {
             position: fixed;
-            top: 20px;
+            top: 80px;
             left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: rgba(76, 175, 80, 0.9);
+            transform: translateX(-50%) translateY(-200px);
+            background: rgba(76, 175, 80, 0.95);
             backdrop-filter: blur(10px);
             padding: 15px 30px;
             border-radius: 15px;
@@ -211,6 +211,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            white-space: nowrap;
         }
         .notification.show { transform: translateX(-50%) translateY(0); }
         .notification-icon { font-size: 1.5em; animation: notificationBounce 0.6s ease; }
@@ -245,16 +246,33 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+        
+        /* Мобильная адаптация */
         @media (max-width: 768px) {
             h1 { font-size: 1.6em; }
             .counter { font-size: 3em; }
             .sign-button { padding: 18px 45px; font-size: 1.1em; }
             .petition-text { font-size: 0.95em; }
+            
+            /* Уведомление ниже на мобильных */
+            .notification {
+                top: 100px;
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
         }
+        
         @media (max-width: 480px) {
             h1 { font-size: 1.4em; }
             .counter { font-size: 2.5em; }
             .container { padding: 30px 20px; }
+            
+            /* Ещё ниже на маленьких экранах */
+            .notification {
+                top: 120px;
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
         }
     </style>
 </head>
@@ -306,7 +324,7 @@
         <button class="sign-button" id="signButton">Подписать петицию</button>
 
         <div class="privacy-note">
-             Полностью анонимно. Мы не собираем IP-адреса, имена или любые персональные данные.
+            🔒 Полностью анонимно. Мы не собираем IP-адреса, имена или любые персональные данные.
         </div>
     </div>
 
@@ -382,10 +400,9 @@
             canvas.height = window.innerHeight;
         });
 
-        // ===== ПРОКСИ-СЛОЙ (СКРЫТЫЙ) =====
+        // ===== ПРОКСИ-СЛОЙ =====
         const WORKER_URL = 'https://calm-dream-11e5petition-counter.tvorcheskiparen.workers.dev';
         
-        // Список прокси-сервисов (пробуем по очереди)
         const PROXY_SERVICES = [
             {
                 name: 'corsproxy.io',
@@ -415,8 +432,8 @@
         
         let currentCount = 0;
         let hasSigned = localStorage.getItem('hasSigned') === 'true';
+        let isPageLoaded = false; // Флаг загрузки страницы
 
-        // Функция для запроса через прокси с автоматическим переключением
         async function fetchWithProxy(url, options = {}) {
             const maxAttempts = PROXY_SERVICES.length;
             let lastError = null;
@@ -442,9 +459,7 @@
                         throw new Error(`HTTP ${response.status}`);
                     }
 
-                    // Успех! Запоминаем рабочий прокси
                     currentProxyIndex = proxyIndex;
-                    
                     return response;
                 } catch (error) {
                     lastError = error;
@@ -456,7 +471,6 @@
             throw lastError || new Error('Все прокси недоступны');
         }
 
-        // Анимация чисел
         function animateCounterWithEffect(target) {
             const currentStr = currentCount.toString();
             const targetStr = target.toString();
@@ -485,9 +499,7 @@
 
         async function getCounter() {
             try {
-                const response = await fetchWithProxy(WORKER_URL, {
-                    method: 'GET'
-                });
+                const response = await fetchWithProxy(WORKER_URL, { method: 'GET' });
                 const count = await response.text();
                 statusDot.classList.remove('error');
                 statusText.textContent = 'Онлайн';
@@ -514,7 +526,11 @@
             }
         }
 
-        function showNotification() {
+        function showNotification(text = 'Кто-то только что подписал!') {
+            // НЕ показывать уведомление если страница ещё загружается
+            if (!isPageLoaded) return;
+            
+            document.getElementById('notificationText').textContent = text;
             notification.classList.add('show');
             setTimeout(() => {
                 notification.classList.remove('show');
@@ -541,7 +557,9 @@
                 signButton.disabled = true;
             }
 
-            // Опрос каждые 2 секунды
+            // Страница загружена — теперь можно показывать уведомления
+            isPageLoaded = true;
+
             setInterval(pollCounter, 2000);
         }
 
