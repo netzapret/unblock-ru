@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мы против цифрового железного занавеса</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #05051a;
@@ -22,7 +17,6 @@
             overflow-x: hidden;
             position: relative;
         }
-
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -31,7 +25,6 @@
             height: 100%;
             z-index: 0;
         }
-
         .glow-bg {
             position: fixed;
             width: 600px;
@@ -42,18 +35,15 @@
             z-index: 0;
             pointer-events: none;
         }
-
         .glow-bg:nth-child(2) {
             background: radial-gradient(circle, rgba(147, 112, 219, 0.1) 0%, transparent 70%);
             animation-delay: -7.5s;
         }
-
         @keyframes glowMove {
             0%, 100% { transform: translate(0, 0) scale(1); }
             33% { transform: translate(100px, -100px) scale(1.2); }
             66% { transform: translate(-50px, 50px) scale(0.8); }
         }
-
         .container {
             position: relative;
             z-index: 2;
@@ -65,17 +55,13 @@
             backdrop-filter: blur(15px);
             border-radius: 25px;
             border: 1px solid rgba(100, 150, 255, 0.4);
-            box-shadow: 
-                0 0 60px rgba(100, 150, 255, 0.2),
-                inset 0 0 60px rgba(100, 150, 255, 0.05);
+            box-shadow: 0 0 60px rgba(100, 150, 255, 0.2), inset 0 0 60px rgba(100, 150, 255, 0.05);
             animation: containerFloat 6s ease-in-out infinite;
         }
-
         @keyframes containerFloat {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-
         h1 {
             font-size: 2.2em;
             margin-bottom: 30px;
@@ -87,13 +73,11 @@
             animation: gradient 5s ease infinite;
             line-height: 1.3;
         }
-
         @keyframes gradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .petition-text {
             font-size: 1em;
             line-height: 1.7;
@@ -101,16 +85,8 @@
             text-align: left;
             color: rgba(255, 255, 255, 0.9);
         }
-
-        .petition-text p {
-            margin-bottom: 18px;
-        }
-
-        .counter-wrapper {
-            margin: 30px 0;
-            position: relative;
-        }
-
+        .petition-text p { margin-bottom: 18px; }
+        .counter-wrapper { margin: 30px 0; position: relative; }
         .counter-label {
             font-size: 1.2em;
             color: rgba(255, 255, 255, 0.7);
@@ -122,8 +98,6 @@
             justify-content: center;
             gap: 10px;
         }
-
-        /* LIVE индикатор */
         .live-badge {
             display: inline-flex;
             align-items: center;
@@ -137,7 +111,6 @@
             letter-spacing: 2px;
             color: #ff4444;
         }
-
         .live-dot {
             width: 8px;
             height: 8px;
@@ -145,12 +118,10 @@
             border-radius: 50%;
             animation: livePulse 1.5s ease-in-out infinite;
         }
-
         @keyframes livePulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.3; transform: scale(0.8); }
         }
-
         .counter {
             font-size: 4.5em;
             font-weight: bold;
@@ -162,32 +133,19 @@
             display: inline-block;
             overflow: hidden;
         }
-
         .counter-digit {
             display: inline-block;
             animation: digitSlide 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-
         @keyframes digitSlide {
-            0% {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-
-        .counter.glow {
-            animation: counterGlow 0.6s ease;
-        }
-
+        .counter.glow { animation: counterGlow 0.6s ease; }
         @keyframes counterGlow {
             0%, 100% { filter: brightness(1); }
             50% { filter: brightness(1.5); transform: scale(1.1); }
         }
-
         .sign-button {
             background: linear-gradient(45deg, #6495ed, #9370db);
             border: none;
@@ -198,14 +156,11 @@
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 
-                0 5px 30px rgba(100, 150, 255, 0.4),
-                0 0 60px rgba(100, 150, 255, 0.2);
+            box-shadow: 0 5px 30px rgba(100, 150, 255, 0.4), 0 0 60px rgba(100, 150, 255, 0.2);
             margin-top: 25px;
             position: relative;
             overflow: hidden;
         }
-
         .sign-button::before {
             content: '';
             position: absolute;
@@ -218,42 +173,27 @@
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-
-        .sign-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
+        .sign-button:hover::before { width: 300px; height: 300px; }
         .sign-button:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 
-                0 10px 40px rgba(100, 150, 255, 0.6),
-                0 0 80px rgba(100, 150, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(100, 150, 255, 0.6), 0 0 80px rgba(100, 150, 255, 0.3);
         }
-
-        .sign-button:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
+        .sign-button:active { transform: translateY(-1px) scale(0.98); }
         .sign-button.signed {
             background: linear-gradient(45deg, #4caf50, #45a049);
             cursor: default;
             animation: successPulse 0.6s ease;
         }
-
         @keyframes successPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-
         .privacy-note {
             margin-top: 30px;
             font-size: 0.9em;
             color: rgba(255, 255, 255, 0.6);
             font-style: italic;
         }
-
-        /* Уведомление о новой подписи */
         .notification {
             position: fixed;
             top: 20px;
@@ -272,22 +212,12 @@
             align-items: center;
             gap: 10px;
         }
-
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .notification-icon {
-            font-size: 1.5em;
-            animation: notificationBounce 0.6s ease;
-        }
-
+        .notification.show { transform: translateX(-50%) translateY(0); }
+        .notification-icon { font-size: 1.5em; animation: notificationBounce 0.6s ease; }
         @keyframes notificationBounce {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.3); }
         }
-
-        /* Статус подключения */
         .status-bar {
             position: fixed;
             bottom: 20px;
@@ -303,7 +233,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .status-dot {
             width: 6px;
             height: 6px;
@@ -311,23 +240,29 @@
             background: #4caf50;
             animation: statusPulse 2s ease-in-out infinite;
         }
-
-        .status-dot.error {
-            background: #ff4444;
-        }
-
+        .status-dot.error { background: #ff4444; }
         @keyframes statusPulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-
+        .proxy-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(255, 165, 0, 0.2);
+            border: 1px solid rgba(255, 165, 0, 0.5);
+            border-radius: 20px;
+            font-size: 0.75em;
+            z-index: 100;
+            color: #ffa500;
+        }
         @media (max-width: 768px) {
             h1 { font-size: 1.6em; }
             .counter { font-size: 3em; }
             .sign-button { padding: 18px 45px; font-size: 1.1em; }
             .petition-text { font-size: 0.95em; }
         }
-
         @media (max-width: 480px) {
             h1 { font-size: 1.4em; }
             .counter { font-size: 2.5em; }
@@ -340,13 +275,15 @@
     <div class="glow-bg"></div>
     <div class="glow-bg"></div>
     
-    <!-- Уведомление -->
     <div class="notification" id="notification">
         <span class="notification-icon">✍️</span>
         <span id="notificationText">Кто-то только что подписал!</span>
     </div>
 
-    <!-- Статус -->
+    <div class="proxy-indicator" id="proxyIndicator">
+         Прокси: <span id="proxyName">поиск...</span>
+    </div>
+
     <div class="status-bar">
         <div class="status-dot" id="statusDot"></div>
         <span id="statusText">Подключение...</span>
@@ -409,14 +346,12 @@
                 this.color = Math.random() > 0.5 ? 'rgba(100, 150, 255, ' : 'rgba(147, 112, 219, ';
                 this.alpha = Math.random() * 0.5 + 0.2;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
-
             draw() {
                 ctx.fillStyle = this.color + this.alpha + ')';
                 ctx.beginPath();
@@ -433,18 +368,15 @@
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             particles.forEach(particle => {
                 particle.update();
                 particle.draw();
             });
-
             particles.forEach((p1, i) => {
                 particles.slice(i + 1).forEach(p2 => {
                     const dx = p1.x - p2.x;
                     const dy = p1.y - p2.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < 150) {
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(100, 150, 255, ${0.1 * (1 - distance / 150)})`;
@@ -455,7 +387,6 @@
                     }
                 });
             });
-
             requestAnimationFrame(animateParticles);
         }
 
@@ -467,21 +398,87 @@
             canvas.height = window.innerHeight;
         });
 
-        // ===== СЧЁТЧИК С REAL-TIME =====
+        // ===== ПРОКСИ-СЛОЙ =====
         const WORKER_URL = 'https://calm-dream-11e5petition-counter.tvorcheskiparen.workers.dev';
         
+        // Список прокси-сервисов (будем пробовать по очереди)
+        const PROXY_SERVICES = [
+            {
+                name: 'corsproxy.io',
+                url: (target) => `https://corsproxy.io/?${encodeURIComponent(target)}`
+            },
+            {
+                name: 'allorigins',
+                url: (target) => `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`
+            },
+            {
+                name: 'codetabs',
+                url: (target) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`
+            },
+            {
+                name: 'прямой',
+                url: (target) => target
+            }
+        ];
+
+        let currentProxyIndex = 0;
+        let currentProxy = PROXY_SERVICES[0];
+
         const counterElement = document.getElementById('counter');
         const signButton = document.getElementById('signButton');
         const notification = document.getElementById('notification');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
+        const proxyName = document.getElementById('proxyName');
         
         let currentCount = 0;
         let hasSigned = localStorage.getItem('hasSigned') === 'true';
-        let pollInterval;
+
+        // Функция для запроса через прокси с автоматическим переключением
+        async function fetchWithProxy(url, options = {}) {
+            const maxAttempts = PROXY_SERVICES.length;
+            let lastError = null;
+
+            for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                const proxyIndex = (currentProxyIndex + attempt) % PROXY_SERVICES.length;
+                const proxy = PROXY_SERVICES[proxyIndex];
+                
+                try {
+                    const proxiedUrl = proxy.url(url + '?nocache=' + Date.now());
+                    
+                    const response = await fetch(proxiedUrl, {
+                        ...options,
+                        cache: 'no-store',
+                        headers: {
+                            ...options.headers,
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    // Успех! Запоминаем рабочий прокси
+                    currentProxyIndex = proxyIndex;
+                    currentProxy = proxy;
+                    proxyName.textContent = proxy.name;
+                    
+                    return response;
+                } catch (error) {
+                    lastError = error;
+                    console.warn(`Прокси ${proxy.name} не работает:`, error.message);
+                    continue;
+                }
+            }
+
+            // Все прокси не сработали
+            throw lastError || new Error('Все прокси недоступны');
+        }
 
         // Анимация чисел
-        function animateCounterWithEffect(target, isExternal = false) {
+        function animateCounterWithEffect(target) {
             const currentStr = currentCount.toString();
             const targetStr = target.toString();
             const maxLen = Math.max(currentStr.length, targetStr.length);
@@ -507,25 +504,37 @@
             currentCount = target;
         }
 
-        async function fetchCounter() {
+        async function getCounter() {
             try {
-                const response = await fetch(WORKER_URL + '?t=' + Date.now(), {
-                    cache: 'no-cache'
+                const response = await fetchWithProxy(WORKER_URL, {
+                    method: 'GET'
                 });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const count = await response.text();
                 statusDot.classList.remove('error');
                 statusText.textContent = 'Онлайн';
                 return parseInt(count) || 0;
             } catch (error) {
-                console.error('Ошибка:', error);
+                console.error('Ошибка получения счётчика:', error);
                 statusDot.classList.add('error');
                 statusText.textContent = 'Ошибка';
                 return null;
             }
         }
 
-        // Показать уведомление
+        async function incrementCounter() {
+            try {
+                const response = await fetchWithProxy(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' }
+                });
+                const count = await response.text();
+                return parseInt(count) || 0;
+            } catch (error) {
+                console.error('Ошибка увеличения счётчика:', error);
+                return currentCount;
+            }
+        }
+
         function showNotification() {
             notification.classList.add('show');
             setTimeout(() => {
@@ -533,37 +542,16 @@
             }, 3000);
         }
 
-        // Опрос сервера каждые 2 секунды
         async function pollCounter() {
-            const newCount = await fetchCounter();
+            const newCount = await getCounter();
             if (newCount !== null && newCount > currentCount) {
-                const diff = newCount - currentCount;
-                animateCounterWithEffect(newCount, true);
-                
-                if (diff > 0) {
-                    showNotification();
-                }
-            }
-        }
-
-        async function incrementCounter() {
-            try {
-                const response = await fetch(WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    cache: 'no-cache'
-                });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const count = await response.text();
-                return parseInt(count) || 0;
-            } catch (error) {
-                console.error('Ошибка:', error);
-                return currentCount;
+                animateCounterWithEffect(newCount);
+                showNotification();
             }
         }
 
         async function init() {
-            const count = await fetchCounter();
+            const count = await getCounter();
             if (count !== null) {
                 animateCounterWithEffect(count);
             }
@@ -574,8 +562,8 @@
                 signButton.disabled = true;
             }
 
-            // Запускаем polling каждые 2 секунды
-            pollInterval = setInterval(pollCounter, 2000);
+            // Опрос каждые 2 секунды
+            setInterval(pollCounter, 2000);
         }
 
         signButton.addEventListener('click', async () => {
@@ -594,6 +582,11 @@
                 localStorage.setItem('hasSigned', 'true');
                 signButton.textContent = '✓ Спасибо за подпись!';
                 signButton.classList.add('signed');
+                statusText.textContent = 'Подпись засчитана!';
+                
+                setTimeout(() => {
+                    statusText.textContent = 'Онлайн';
+                }, 2000);
             } else {
                 animateCounterWithEffect(currentCount);
                 signButton.disabled = false;
