@@ -245,18 +245,6 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        .proxy-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            background: rgba(255, 165, 0, 0.2);
-            border: 1px solid rgba(255, 165, 0, 0.5);
-            border-radius: 20px;
-            font-size: 0.75em;
-            z-index: 100;
-            color: #ffa500;
-        }
         @media (max-width: 768px) {
             h1 { font-size: 1.6em; }
             .counter { font-size: 3em; }
@@ -278,10 +266,6 @@
     <div class="notification" id="notification">
         <span class="notification-icon">✍️</span>
         <span id="notificationText">Кто-то только что подписал!</span>
-    </div>
-
-    <div class="proxy-indicator" id="proxyIndicator">
-         Прокси: <span id="proxyName">поиск...</span>
     </div>
 
     <div class="status-bar">
@@ -322,7 +306,7 @@
         <button class="sign-button" id="signButton">Подписать петицию</button>
 
         <div class="privacy-note">
-            🔒 Полностью анонимно. Мы не собираем IP-адреса, имена или любые персональные данные.
+             Полностью анонимно. Мы не собираем IP-адреса, имена или любые персональные данные.
         </div>
     </div>
 
@@ -398,10 +382,10 @@
             canvas.height = window.innerHeight;
         });
 
-        // ===== ПРОКСИ-СЛОЙ =====
+        // ===== ПРОКСИ-СЛОЙ (СКРЫТЫЙ) =====
         const WORKER_URL = 'https://calm-dream-11e5petition-counter.tvorcheskiparen.workers.dev';
         
-        // Список прокси-сервисов (будем пробовать по очереди)
+        // Список прокси-сервисов (пробуем по очереди)
         const PROXY_SERVICES = [
             {
                 name: 'corsproxy.io',
@@ -422,14 +406,12 @@
         ];
 
         let currentProxyIndex = 0;
-        let currentProxy = PROXY_SERVICES[0];
 
         const counterElement = document.getElementById('counter');
         const signButton = document.getElementById('signButton');
         const notification = document.getElementById('notification');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
-        const proxyName = document.getElementById('proxyName');
         
         let currentCount = 0;
         let hasSigned = localStorage.getItem('hasSigned') === 'true';
@@ -462,18 +444,15 @@
 
                     // Успех! Запоминаем рабочий прокси
                     currentProxyIndex = proxyIndex;
-                    currentProxy = proxy;
-                    proxyName.textContent = proxy.name;
                     
                     return response;
                 } catch (error) {
                     lastError = error;
-                    console.warn(`Прокси ${proxy.name} не работает:`, error.message);
+                    console.warn(`Прокси не работает:`, error.message);
                     continue;
                 }
             }
 
-            // Все прокси не сработали
             throw lastError || new Error('Все прокси недоступны');
         }
 
