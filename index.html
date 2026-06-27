@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мы против цифрового железного занавеса</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #05051a;
@@ -22,7 +17,6 @@
             overflow-x: hidden;
             position: relative;
         }
-
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -31,29 +25,6 @@
             height: 100%;
             z-index: 0;
         }
-
-        .glow-bg {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(100, 150, 255, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: glowMove 15s ease-in-out infinite;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .glow-bg:nth-child(2) {
-            background: radial-gradient(circle, rgba(147, 112, 219, 0.1) 0%, transparent 70%);
-            animation-delay: -7.5s;
-        }
-
-        @keyframes glowMove {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(100px, -100px) scale(1.2); }
-            66% { transform: translate(-50px, 50px) scale(0.8); }
-        }
-
         .container {
             position: relative;
             z-index: 2;
@@ -65,35 +36,28 @@
             backdrop-filter: blur(15px);
             border-radius: 25px;
             border: 1px solid rgba(100, 150, 255, 0.4);
-            box-shadow: 
-                0 0 60px rgba(100, 150, 255, 0.2),
-                inset 0 0 60px rgba(100, 150, 255, 0.05);
-            animation: containerFloat 6s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(100, 150, 255, 0.2);
+            animation: fadeIn 1s ease;
         }
-
-        @keyframes containerFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         h1 {
             font-size: 2.2em;
             margin-bottom: 30px;
-            background: linear-gradient(45deg, #6495ed, #9370db, #6495ed, #9370db);
-            background-size: 300% 300%;
+            background: linear-gradient(45deg, #6495ed, #9370db, #6495ed);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradient 5s ease infinite;
-            line-height: 1.3;
+            animation: gradient 3s ease infinite;
         }
-
         @keyframes gradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .petition-text {
             font-size: 1em;
             line-height: 1.7;
@@ -101,91 +65,34 @@
             text-align: left;
             color: rgba(255, 255, 255, 0.9);
         }
-
-        .petition-text p {
-            margin-bottom: 18px;
-        }
-
-        .counter-wrapper {
-            margin: 30px 0;
-            position: relative;
-        }
-
+        .petition-text p { margin-bottom: 18px; }
+        
         .counter-label {
             font-size: 1.2em;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
-
-        /* LIVE индикатор */
-        .live-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 50, 50, 0.2);
-            border: 1px solid rgba(255, 50, 50, 0.5);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.7em;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: #ff4444;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ff4444;
-            border-radius: 50%;
-            animation: livePulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.8); }
-        }
-
+        
         .counter {
             font-size: 4.5em;
             font-weight: bold;
-            background: linear-gradient(180deg, #6495ed 0%, #9370db 50%, #6495ed 100%);
+            margin: 20px 0;
+            background: linear-gradient(180deg, #6495ed 0%, #9370db 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            position: relative;
-            display: inline-block;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
-
-        .counter-digit {
-            display: inline-block;
-            animation: digitSlide 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        
+        .counter.updating {
+            animation: counterPulse 0.5s ease;
         }
-
-        @keyframes digitSlide {
-            0% {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .counter.glow {
-            animation: counterGlow 0.6s ease;
-        }
-
-        @keyframes counterGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); transform: scale(1.1); }
+        
+        @keyframes counterPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); filter: brightness(1.5); }
         }
 
         .sign-button {
@@ -198,68 +105,42 @@
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 
-                0 5px 30px rgba(100, 150, 255, 0.4),
-                0 0 60px rgba(100, 150, 255, 0.2);
+            box-shadow: 0 5px 30px rgba(100, 150, 255, 0.4);
             margin-top: 25px;
             position: relative;
             overflow: hidden;
         }
-
-        .sign-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .sign-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
         .sign-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 
-                0 10px 40px rgba(100, 150, 255, 0.6),
-                0 0 80px rgba(100, 150, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(100, 150, 255, 0.6);
         }
-
-        .sign-button:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
         .sign-button.signed {
             background: linear-gradient(45deg, #4caf50, #45a049);
             cursor: default;
-            animation: successPulse 0.6s ease;
+            animation: successBounce 0.6s ease;
         }
-
-        @keyframes successPulse {
+        @keyframes successBounce {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-
+        .sign-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .privacy-note {
             margin-top: 30px;
             font-size: 0.9em;
             color: rgba(255, 255, 255, 0.6);
             font-style: italic;
         }
-
-        /* Уведомление о новой подписи */
+        
+        /* Уведомление */
         .notification {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(-100px);
-            background: rgba(76, 175, 80, 0.9);
+            background: rgba(76, 175, 80, 0.95);
             backdrop-filter: blur(10px);
             padding: 15px 30px;
             border-radius: 15px;
@@ -272,22 +153,11 @@
             align-items: center;
             gap: 10px;
         }
-
         .notification.show {
             transform: translateX(-50%) translateY(0);
         }
-
-        .notification-icon {
-            font-size: 1.5em;
-            animation: notificationBounce 0.6s ease;
-        }
-
-        @keyframes notificationBounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-
-        /* Статус подключения */
+        
+        /* Статус */
         .status-bar {
             position: fixed;
             bottom: 20px;
@@ -303,50 +173,51 @@
             align-items: center;
             gap: 8px;
         }
-
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #4caf50;
-            animation: statusPulse 2s ease-in-out infinite;
+            animation: pulse 2s infinite;
         }
-
         .status-dot.error {
             background: #ff4444;
+            animation: none;
         }
-
-        @keyframes statusPulse {
+        @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+        
+        /* Индикатор загрузки */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #6495ed;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
             h1 { font-size: 1.6em; }
             .counter { font-size: 3em; }
             .sign-button { padding: 18px 45px; font-size: 1.1em; }
-            .petition-text { font-size: 0.95em; }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 1.4em; }
-            .counter { font-size: 2.5em; }
-            .container { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
     <canvas id="particles-canvas"></canvas>
-    <div class="glow-bg"></div>
-    <div class="glow-bg"></div>
     
-    <!-- Уведомление -->
     <div class="notification" id="notification">
-        <span class="notification-icon">✍️</span>
-        <span id="notificationText">Кто-то только что подписал!</span>
+        <span>✍️</span>
+        <span id="notificationText">Новая подпись!</span>
     </div>
 
-    <!-- Статус -->
     <div class="status-bar">
         <div class="status-dot" id="statusDot"></div>
         <span id="statusText">Подключение...</span>
@@ -358,28 +229,17 @@
         <div class="petition-text">
             <p>
                 Граждане России имеют право на свободный доступ к информации и коммуникации. 
-                Массовые блокировки иностранных сервисов нарушают наши конституционные права 
-                и изолируют нас от мирового информационного пространства.
-            </p>
-            <p>
-                Мы не требуем отмены законов. Мы требуем здравого смысла. 
-                Блокировки не делают нас безопаснее — они делают нас отрезанными от мира.
+                Массовые блокировки иностранных сервисов нарушают наши конституционные права.
             </p>
             <p>
                 Эта петиция — символ нашего несогласия. Подпись анонимна. 
-                Мы не собираем ваши данные. Просто нажмите кнопку, если вы с нами.
+                Мы не собираем ваши данные. Просто нажмите кнопку.
             </p>
         </div>
 
-        <div class="counter-wrapper">
-            <div class="counter-label">
-                <span class="live-badge">
-                    <span class="live-dot"></span>
-                    LIVE
-                </span>
-                Нас уже:
-            </div>
-            <div class="counter" id="counter">0</div>
+        <div class="counter-label">Нас уже:</div>
+        <div class="counter" id="counter">
+            <span class="loading"></span>
         </div>
 
         <button class="sign-button" id="signButton">Подписать петицию</button>
@@ -397,77 +257,33 @@
         canvas.height = window.innerHeight;
 
         const particles = [];
-        const particleCount = 100;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-                this.color = Math.random() > 0.5 ? 'rgba(100, 150, 255, ' : 'rgba(147, 112, 219, ';
-                this.alpha = Math.random() * 0.5 + 0.2;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.fillStyle = this.color + this.alpha + ')';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2 + 1
+            });
         }
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.fillStyle = 'rgba(100, 150, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
             });
-
-            particles.forEach((p1, i) => {
-                particles.slice(i + 1).forEach(p2 => {
-                    const dx = p1.x - p2.x;
-                    const dy = p1.y - p2.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(100, 150, 255, ${0.1 * (1 - distance / 150)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                });
-            });
-
             requestAnimationFrame(animateParticles);
         }
-
-        initParticles();
         animateParticles();
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // ===== СЧЁТЧИК С REAL-TIME =====
+        // ===== СЧЁТЧИК =====
         const WORKER_URL = 'https://calm-dream-11e5petition-counter.tvorcheskiparen.workers.dev';
         
         const counterElement = document.getElementById('counter');
@@ -478,94 +294,94 @@
         
         let currentCount = 0;
         let hasSigned = localStorage.getItem('hasSigned') === 'true';
-        let pollInterval;
+        let lastKnownCount = 0;
 
-        // Анимация чисел
-        function animateCounterWithEffect(target, isExternal = false) {
-            const currentStr = currentCount.toString();
-            const targetStr = target.toString();
-            const maxLen = Math.max(currentStr.length, targetStr.length);
-            
-            const paddedCurrent = currentStr.padStart(maxLen, '0');
-            const paddedTarget = targetStr.padStart(maxLen, '0');
-            
-            let html = '';
-            
-            for (let i = 0; i < maxLen; i++) {
-                if (paddedCurrent[i] !== paddedTarget[i]) {
-                    html += `<span class="counter-digit">${paddedTarget[i]}</span>`;
-                } else {
-                    html += `<span>${paddedTarget[i]}</span>`;
-                }
+        // Показываем число с анимацией
+        function updateCounter(count, animate = true) {
+            if (animate) {
+                counterElement.classList.add('updating');
+                setTimeout(() => counterElement.classList.remove('updating'), 500);
             }
-            
-            counterElement.innerHTML = html;
-            counterElement.classList.remove('glow');
-            void counterElement.offsetWidth;
-            counterElement.classList.add('glow');
-            
-            currentCount = target;
+            counterElement.textContent = count.toLocaleString('ru-RU');
+            lastKnownCount = count;
         }
 
-        async function fetchCounter() {
+        // GET запрос с обходом кэша
+        async function fetchCounter(showNotification = false) {
             try {
-                const response = await fetch(WORKER_URL + '?t=' + Date.now(), {
-                    cache: 'no-cache'
+                const response = await fetch(WORKER_URL + '?nocache=' + Date.now(), {
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
                 });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const count = await response.text();
+                
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                
+                const text = await response.text();
+                const count = parseInt(text) || 0;
+                
                 statusDot.classList.remove('error');
                 statusText.textContent = 'Онлайн';
-                return parseInt(count) || 0;
+                
+                // Если число изменилось и это не наша подпись
+                if (count > lastKnownCount && showNotification) {
+                    showNotificationPopup();
+                }
+                
+                return count;
             } catch (error) {
-                console.error('Ошибка:', error);
+                console.error('Ошибка получения счётчика:', error);
                 statusDot.classList.add('error');
                 statusText.textContent = 'Ошибка';
                 return null;
             }
         }
 
-        // Показать уведомление
-        function showNotification() {
+        // POST запрос
+        async function submitSignature() {
+            try {
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'text/plain',
+                        'Cache-Control': 'no-cache'
+                    },
+                    cache: 'no-store'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                
+                const text = await response.text();
+                return parseInt(text) || 0;
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                throw error;
+            }
+        }
+
+        // Уведомление
+        function showNotificationPopup() {
             notification.classList.add('show');
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
 
-        // Опрос сервера каждые 2 секунды
-        async function pollCounter() {
-            const newCount = await fetchCounter();
-            if (newCount !== null && newCount > currentCount) {
-                const diff = newCount - currentCount;
-                animateCounterWithEffect(newCount, true);
-                
-                if (diff > 0) {
-                    showNotification();
-                }
-            }
-        }
-
-        async function incrementCounter() {
-            try {
-                const response = await fetch(WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    cache: 'no-cache'
-                });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const count = await response.text();
-                return parseInt(count) || 0;
-            } catch (error) {
-                console.error('Ошибка:', error);
-                return currentCount;
-            }
-        }
-
+        // Инициализация
         async function init() {
             const count = await fetchCounter();
             if (count !== null) {
-                animateCounterWithEffect(count);
+                updateCounter(count, false);
+                currentCount = count;
+            } else {
+                updateCounter(0, false);
             }
 
             if (hasSigned) {
@@ -574,30 +390,53 @@
                 signButton.disabled = true;
             }
 
-            // Запускаем polling каждые 2 секунды
-            pollInterval = setInterval(pollCounter, 2000);
+            // Опрос каждые 2 секунды
+            setInterval(async () => {
+                if (!hasSigned) {
+                    const newCount = await fetchCounter(true);
+                    if (newCount !== null && newCount !== currentCount) {
+                        updateCounter(newCount, true);
+                        currentCount = newCount;
+                    }
+                }
+            }, 2000);
         }
 
+        // Обработка клика
         signButton.addEventListener('click', async () => {
             if (hasSigned) return;
 
             signButton.disabled = true;
-            signButton.textContent = 'Подписываю...';
+            signButton.textContent = 'Отправка...';
 
-            const optimisticCount = currentCount + 1;
-            animateCounterWithEffect(optimisticCount);
-
-            const actualCount = await incrementCounter();
-            
-            if (actualCount > currentCount) {
-                hasSigned = true;
-                localStorage.setItem('hasSigned', 'true');
-                signButton.textContent = '✓ Спасибо за подпись!';
-                signButton.classList.add('signed');
-            } else {
-                animateCounterWithEffect(currentCount);
+            try {
+                // Отправляем подпись
+                const newCount = await submitSignature();
+                
+                // СРАЗУ получаем актуальное число с сервера
+                const serverCount = await fetchCounter();
+                
+                if (serverCount > 0) {
+                    // Успех!
+                    hasSigned = true;
+                    localStorage.setItem('hasSigned', 'true');
+                    currentCount = serverCount;
+                    updateCounter(serverCount, true);
+                    
+                    signButton.textContent = '✓ Подписано!';
+                    signButton.classList.add('signed');
+                    
+                    // Показываем уведомление
+                    showNotificationPopup();
+                } else {
+                    throw new Error('Сервер вернул 0');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                // Откат
                 signButton.disabled = false;
                 signButton.textContent = 'Подписать петицию';
+                alert('Ошибка: ' + error.message + '\nПопробуйте ещё раз.');
             }
         });
 
